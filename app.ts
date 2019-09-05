@@ -3,6 +3,8 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { configDB }from './utils/connection'
 
+import simuladorRoutes from './routes/simulacion';
+
 /**
  * compile
  *  tsc -w  ./raiz
@@ -27,17 +29,14 @@ Server.getInstance
 Server.getInstance
     .app.use( cors({ origin: true, credentials: true  }) );
 
-Server.getInstance.startAPP(  ()=>{
-    console.log(`
-        [ API ] Running on port ${ Server.getInstance.port }
-    `)
-    configDB('mongodb://localhost:27017/simulator')
-    .then( res =>{
+Server.getInstance.app.use('/api/v1', simuladorRoutes)
+
+configDB("mongodb://localhost:27017/simulador").then( dbConfig =>{
+    Server.getInstance.startAPP(  ()=>{
         console.log(`
-            [ DB ] Online
-        `)
+            [ API ] Running on port ${ Server.getInstance.port }
+            ${ dbConfig }
+        `);
     })
-    .catch(e =>{
-        console.log(e)
-    })
-})
+}).catch(e=>{ console.log(e)})
+
