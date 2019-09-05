@@ -114,6 +114,16 @@ var Simulador = /** @class */ (function () {
             return res.status(200).send({ data: reportData });
         });
     };
+    Simulador.prototype.getReportCord = function (req, res) {
+        reporte_1.reporteModel.find({}, { _id: 0, __v: 0, id_location: 0, position: 0,
+            time_reported: 0, type: 0, Stops_Usuarios: 0, pasajeros: 0 }, function (err, reportData) {
+            if (err)
+                return res.status(500).send({ message: 'Algo salió mal: ' + err });
+            if (!reportData)
+                return res.status(404).send({ message: 'No hay datos' });
+            return res.status(200).send({ data: reportData });
+        });
+    };
     return Simulador;
 }());
 exports.Simulador = Simulador;
